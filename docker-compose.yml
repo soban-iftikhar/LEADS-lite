@@ -1,0 +1,15 @@
+services:
+  mongo:
+    image: mongo:7
+    container_name: leads_lite_mongo
+    restart: unless-stopped
+    ports:
+      - "27018:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: leads_user
+      MONGO_INITDB_ROOT_PASSWORD: leads_password
+    volumes:
+      - leads_lite_mongo_data:/data/db
+
+volumes:
+  leads_lite_mongo_data:

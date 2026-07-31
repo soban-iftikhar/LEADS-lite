@@ -1,0 +1,10 @@
+# Python bytecode
+__pycache__/
+*.pyc
+
+# Environment files and virtual environments
+.env
+backend/venv/
+
+# Node dependencies
+frontend/node_modules/
