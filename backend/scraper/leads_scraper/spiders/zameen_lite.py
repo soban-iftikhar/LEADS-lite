@@ -142,16 +142,6 @@ class ZameenLiteSpider(BaseLiteSpider):
                 f"<title>: '{page_title}' — has_price_marker: {has_price} — "
                 f"has_title_marker: {has_title_marker}"
             )
-            if not getattr(self, "_debug_dumped", False):
-                self._debug_dumped = True
-                try:
-                    with open("zameen_debug_page.html", "wb") as f:
-                        f.write(response.body)
-                    self.logger.warning(
-                        "[zameen_lite] Saved full page to scraper/zameen_debug_page.html for inspection"
-                    )
-                except Exception as e:
-                    self.logger.warning(f"[zameen_lite] Could not save debug page: {e}")
             return
 
         if external_id:

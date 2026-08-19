@@ -10,8 +10,8 @@ body {
 .page {
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
   padding: 24px;
 }
 
@@ -21,6 +21,11 @@ body {
   border: 1px solid #111111;
   border-radius: 8px;
   padding: 32px;
+  margin-top: 24px;
+}
+
+.wide-card {
+  max-width: 720px;
 }
 
 h1 {
@@ -206,4 +211,184 @@ h1 {
   white-space: pre-wrap;
   word-break: break-word;
   margin: 0;
+}
+
+/* ---- Step nav ---- */
+
+.step-nav {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 720px;
+  width: 100%;
+}
+
+.step-nav-item {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border: 1px solid #cccccc;
+  border-radius: 14px;
+  color: #999999;
+}
+
+.step-nav-active {
+  border-color: #111111;
+  color: #111111;
+  background: #111111;
+  color: #ffffff;
+}
+
+.step-nav-done {
+  border-color: #111111;
+  color: #111111;
+}
+
+/* ---- Buttons row / links ---- */
+
+.button-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.button-row .btn-primary,
+.button-row .btn-secondary {
+  flex: 1;
+}
+
+a.btn-secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---- Leads table (step 2 + step 4) ---- */
+
+.leads-table-wrap {
+  margin-top: 16px;
+  max-height: 360px;
+  overflow-y: auto;
+  border: 1px solid #111111;
+  border-radius: 4px;
+}
+
+.leads-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.leads-table th,
+.leads-table td {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.leads-table th {
+  background: #f7f7f7;
+  position: sticky;
+  top: 0;
+}
+
+/* ---- Launch page ---- */
+
+.template-preview {
+  border: 1px solid #111111;
+  border-radius: 4px;
+  padding: 12px;
+  font-size: 13px;
+  line-height: 1.5;
+  background: #f7f7f7;
+  white-space: pre-wrap;
+}
+
+.campaign-summary {
+  margin-top: 16px;
+}
+
+/* ---- Stats page ---- */
+
+.mock-badge {
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 2px 8px;
+  border: 1px solid #111111;
+  border-radius: 10px;
+  vertical-align: middle;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.stat-box {
+  border: 1px solid #111111;
+  border-radius: 6px;
+  padding: 14px 8px;
+  text-align: center;
+}
+
+.stat-total {
+  background: #111111;
+  color: #ffffff;
+}
+
+.stat-value {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.stat-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-top: 2px;
+  color: inherit;
+  opacity: 0.7;
+}
+
+.status-pill {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+  border: 1px solid #111111;
+  text-transform: uppercase;
+}
+
+.status-pill-sent,
+.status-pill-delivered {
+  background: #ffffff;
+  color: #111111;
+}
+
+.status-pill-read {
+  background: #111111;
+  color: #ffffff;
+}
+
+.status-pill-failed {
+  background: #ffffff;
+  color: #b00020;
+  border-color: #b00020;
+}
+
+.status-pill-skipped,
+.status-pill-queued {
+  background: #f2f2f2;
+  color: #777777;
+}
+
+.pill-error {
+  font-size: 11px;
+  color: #b00020;
 }

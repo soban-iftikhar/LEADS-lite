@@ -1,4 +1,5 @@
 import asyncio
+import collections
 import os
 import subprocess
 import sys
@@ -18,24 +19,25 @@ SPIDER_MAP = {
 }
 
 
-def _watch_process(job_id: str, process: subprocess.Popen, log_path: str):
+def _watch_process(job_id: str, process: subprocess.Popen, tail: collections.deque):
     """
-    Runs in a background thread. If the scrapy subprocess dies without the
-    spider's own closed()-hook ever marking the job finished (i.e. it
-    crashed on startup, like an import error), surface the real error
-    instead of leaving the frontend stuck on "running" forever.
+    Runs in a background thread. Continuously drains the subprocess's
+    stdout into an in-memory rolling buffer (never written to disk —
+    the job_*.log files were only ever for debugging) so the pipe can't
+    fill up and block the subprocess. If the process dies without the
+    spider's own closed()-hook marking the job finished (i.e. it crashed
+    on startup), surface the buffered tail instead of leaving the
+    frontend stuck on "running" forever.
     """
+    if process.stdout:
+        for line in process.stdout:
+            tail.append(line)
+        process.stdout.close()
     process.wait()
+
     job = job_manager.get_job(job_id)
     if job and job["status"] == "running":
-        tail = ""
-        try:
-            with open(log_path, "r", errors="ignore") as f:
-                lines = f.readlines()
-                tail = "".join(lines[-25:])
-        except Exception:
-            pass
-        job_manager.mark_crashed(job_id, tail)
+        job_manager.mark_crashed(job_id, "".join(tail))
 
 
 @router.get("/cities")
@@ -64,24 +66,24 @@ def start_scrape(req: ScrapeRequest):
         "-a", f"job_id={job_id}",
     ]
 
-    log_path = os.path.join(SCRAPER_DIR, f"job_{job_id}.log")
-    log_file = open(log_path, "w")
-
     try:
         process = subprocess.Popen(
             cmd,
             cwd=SCRAPER_DIR,
             env=env,
-            stdout=log_file,
+            stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
+            text=True,
+            bufsize=1,
         )
     except FileNotFoundError:
         raise HTTPException(500, "scrapy not found — did you install backend/requirements.txt?")
 
     job_manager.create_job(job_id, req.platform, req.city, req.count, process)
 
+    tail = collections.deque(maxlen=50)
     threading.Thread(
-        target=_watch_process, args=(job_id, process, log_path), daemon=True
+        target=_watch_process, args=(job_id, process, tail), daemon=True
     ).start()
 
     return ScrapeResponse(job_id=job_id)

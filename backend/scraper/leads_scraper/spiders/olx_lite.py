@@ -109,16 +109,6 @@ class OLXLiteSpider(BaseLiteSpider):
             self.logger.warning(
                 f"[olx_lite] No seller_name found on {response.url} — <title>: '{page_title}'"
             )
-            if not getattr(self, "_debug_dumped", False):
-                self._debug_dumped = True
-                try:
-                    with open("olx_debug_page.html", "wb") as f:
-                        f.write(response.body)
-                    self.logger.warning(
-                        "[olx_lite] Saved full page to scraper/olx_debug_page.html for inspection"
-                    )
-                except Exception as e:
-                    self.logger.warning(f"[olx_lite] Could not save debug page: {e}")
 
         if self.access_token:
             contact_url = f"{self.BASE_URL}/api/listing/{listing_id}/contactInfo/"
